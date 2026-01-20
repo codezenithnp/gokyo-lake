@@ -8,10 +8,16 @@ const HomePage = () => {
   return (
     <div>
       {/* Hero Section with Navbar */}
-      <div className="relative h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://picsum.photos/seed/hero/1920/1080')" }}>
+      <div
+        className="relative h-screen bg-cover bg-center"
+        style={{ backgroundImage: "url('https://picsum.photos/seed/hero/1920/1080')" }}
+      >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <Navbar />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
+        <div
+          className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center"
+          style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+        >
           <h2 className="text-2xl font-light">WELCOME TO</h2>
           <h1 className="text-7xl font-serif font-bold">Hotel Gokyo lake</h1>
           <p className="mt-4 text-lg">Book your stay and enjoy at the most affordable rates.</p>
@@ -27,43 +33,41 @@ const HomePage = () => {
       {/* Facilities Section */}
       <div className="py-16 bg-white">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-serif mb-4">FACILITIES</h2>
+          <h2 className="text-4xl font-serif mb-4 text-gray-900">FACILITIES</h2>
           <p className="max-w-2xl mx-auto text-gray-600 mb-12">
             We want your stay at our lush hotel to be truly unforgettable. That is why we give special attention to all of your needs so that we can ensure an experience quite unique. Luxury hotels offers the perfect setting with stunning views for leisure and our modern luxury resort facilities will help you enjoy the best of all.
           </p>
           <div className="flex flex-col items-center space-y-16">
             {[1, 2, 3].map((i) => (
-      <div
-        key={i}
-        className="relative w-full max-w-5xl overflow-hidden rounded-xl shadow-lg"
-      >
-        {/* Image */}
-        <Image
-          src={`https://picsum.photos/seed/restaurant${i}/1200/520`}
-          alt="Restaurant"
-          width={1200}
-          height={520}
-          className="w-full h-105 object-cover"
-        />
+              <div
+                key={i}
+                className="relative w-full max-w-5xl overflow-hidden rounded-xl shadow-lg"
+              >
+                {/* Image */}
+                <Image
+                  src={`https://picsum.photos/seed/restaurant${i}/1200/520`}
+                  alt="Restaurant"
+                  width={1200}
+                  height={520}
+                  className="w-full h-105 object-cover"
+                />
 
-        {/* Dark overlay (ONLY over image) */}
-        <div className="absolute inset-0 bg-black/35" />
+                {/* Dark overlay (ONLY over image) */}
+                <div className="absolute inset-0 bg-black/35" />
 
-    {/* Label card (always above overlay) */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
-
-      <div className="rounded-md bg-white px-10 py-4 shadow-lg border border-gray-200">
-        <h3 className="text-lg font-extrabold tracking-widest text-gray-900">
-          RESTAURANT
-        </h3>
-        <p className="mt-1 text-xs font-medium text-gray-600 text-center">
-          Dining & refreshments
-        </p>
-      </div>
-    </div>
-  </div>
-))}
-
+                {/* Label card (always above overlay) */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+                  <div className="rounded-md bg-white px-10 py-4 shadow-lg border border-gray-200">
+                    <h3 className="text-lg font-extrabold tracking-widest text-gray-900">
+                      RESTAURANT
+                    </h3>
+                    <p className="mt-1 text-xs font-medium text-gray-600 text-center">
+                      Dining & refreshments
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -75,20 +79,28 @@ const HomePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {rooms.slice(0, 6).map((room) => (
               <div key={room.name} className="bg-white shadow-md rounded-lg overflow-hidden">
-                <Image src={`https://picsum.photos/seed/${room.name}/400/300`} alt={room.name} width={400} height={300} className="w-full h-48 object-cover" />
+                <Image
+                  src={`https://picsum.photos/seed/${room.name}/400/300`}
+                  alt={room.name}
+                  width={400}
+                  height={300}
+                  className="w-full h-48 object-cover"
+                />
                 <div className="bg-blue-900 text-white p-3">
                   <h3 className="font-bold text-lg">{room.name.toUpperCase()}</h3>
                 </div>
                 <div className="p-4 flex justify-between items-center">
                   <span className="font-bold text-yellow-600">Rs. {room.price}</span>
-                                <Link href={`/booking?room=${room.name}`}>
-                <Button className="w-full">Book Now</Button>
-              </Link>
+                  <Link href={`/booking?room=${room.name}`}>
+                    <Button className="w-full">Book Now</Button>
+                  </Link>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-center text-gray-700 mt-8">All our room types are including complementary breakfast</p>
+          <p className="text-center text-gray-700 mt-8">
+            All our room types are including complementary breakfast
+          </p>
         </div>
       </div>
 
@@ -97,14 +109,24 @@ const HomePage = () => {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="text-center md:text-left">
-              <h2 className="text-4xl font-serif mb-4">Luxury redefined</h2>
-              <p className="text-gray-600 mb-6">
+              <h2 className="text-4xl font-serif mb-4 text-gray-900">
+                Luxury redefined
+              </h2>
+              <p className="text-gray-700 mb-6">
                 Our rooms are designed to transport you into an environment made for leisure. Take your mind off the day-to-day of home life and find a private paradise for yourself.
               </p>
-              <button className="bg-yellow-500 text-black px-8 py-3 font-bold hover:bg-yellow-400 rounded">EXPLORE</button>
+              <button className="bg-yellow-500 text-black px-8 py-3 font-bold hover:bg-yellow-400 rounded shadow">
+                EXPLORE
+              </button>
             </div>
             <div>
-              <Image src="https://picsum.photos/seed/luxury/600/400" alt="Luxury redefined" width={600} height={400} className="rounded-lg shadow-lg" />
+              <Image
+                src="https://picsum.photos/seed/luxury/600/400"
+                alt="Luxury redefined"
+                width={600}
+                height={400}
+                className="rounded-lg shadow-lg"
+              />
             </div>
           </div>
         </div>
@@ -115,21 +137,31 @@ const HomePage = () => {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <Image src="https://picsum.photos/seed/beach/600/400" alt="Leave your worries in the sand" width={600} height={400} className="rounded-lg shadow-lg" />
+              <Image
+                src="https://picsum.photos/seed/beach/600/400"
+                alt="Leave your worries in the sand"
+                width={600}
+                height={400}
+                className="rounded-lg shadow-lg"
+              />
             </div>
             <div className="text-center md:text-left">
-              <h2 className="text-4xl font-serif mb-4">Leave your worries in the sand</h2>
-              <p className="text-gray-600 mb-6">
+              <h2 className="text-4xl font-serif mb-4 text-gray-900">
+                Leave your worries in the sand
+              </h2>
+              <p className="text-gray-700 mb-6">
                 We love life at the beach. Being close to the ocean with access to endless sandy beach ensures a relaxed state of mind. It seems like time stands still watching the ocean.
               </p>
-              <button className="bg-yellow-500 text-black px-8 py-3 font-bold hover:bg-yellow-400 rounded">EXPLORE</button>
+              <button className="bg-yellow-500 text-black px-8 py-3 font-bold hover:bg-yellow-400 rounded shadow">
+                EXPLORE
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Testimonials Section */}
-          <div className="py-20 bg-white">
+      <div className="py-20 bg-white">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-serif mb-8 text-gray-900">
             Testimonials
@@ -150,9 +182,8 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 
 export default HomePage;
-

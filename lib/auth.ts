@@ -30,3 +30,17 @@ export async function getSession() {
     if (!token) return null;
     return verifyToken(token);
 }
+
+export async function login(formData: FormData) {
+    // For demonstration, assuming a user is verified and a token is created
+    const user = { id: '1', name: 'Admin' }; // Example user
+    const token = createToken(user);
+
+    const cookieStore = await cookies();
+    cookieStore.set('session', token, { httpOnly: true, path: '/' });
+}
+
+export async function logout() {
+    const cookieStore = await cookies();
+    cookieStore.delete('session');
+}

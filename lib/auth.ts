@@ -4,11 +4,11 @@ import { cookies } from 'next/headers';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-if (!JWT_SECRET) {
-    throw new Error('Please define the JWT_SECRET environment variable inside .env.local');
-}
-
 export function verifyToken(token: string) {
+    if (!JWT_SECRET) {
+        console.error('JWT_SECRET is not defined');
+        return null;
+    }
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         return decoded;
@@ -18,10 +18,13 @@ export function verifyToken(token: string) {
 }
 
 export function createToken(payload: object) {
+    if (!JWT_SECRET) {
+        throw new Error('JWT_SECRET is not defined. Cannot create token.');
+    }
     return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 }
 
-export function getSession() {
+export async function getSession() {
     const cookieStore = cookies();
     const token = cookieStore.get('session')?.value;
     if (!token) return null;

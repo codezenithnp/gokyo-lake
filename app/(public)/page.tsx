@@ -2,6 +2,7 @@ import { rooms } from '@/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/public/Navbar';
+import { Button } from "@/components/ui/Button";
 
 const HomePage = () => {
   return (
@@ -42,7 +43,7 @@ const HomePage = () => {
           alt="Restaurant"
           width={1200}
           height={520}
-          className="w-full h-[420px] object-cover"
+          className="w-full h-105 object-cover"
         />
 
         {/* Dark overlay (ONLY over image) */}
@@ -70,7 +71,7 @@ const HomePage = () => {
       {/* Accommodation Section */}
       <div className="py-16 bg-gray-50">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-serif mb-8">Accommodation</h2>
+          <h2 className="text-4xl font-serif mb-8 text-gray-900">Accommodation</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {rooms.slice(0, 6).map((room) => (
               <div key={room.name} className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -80,12 +81,14 @@ const HomePage = () => {
                 </div>
                 <div className="p-4 flex justify-between items-center">
                   <span className="font-bold text-yellow-600">Rs. {room.price}</span>
-                  <Link href="#" className="text-sm font-semibold text-blue-900 hover:underline">VIEW ROOM DETAILS</Link>
+                                <Link href={`/booking?room=${room.name}`}>
+                <Button className="w-full">Book Now</Button>
+              </Link>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-center text-gray-600 mt-8">All our room types are including complementary breakfast</p>
+          <p className="text-center text-gray-700 mt-8">All our room types are including complementary breakfast</p>
         </div>
       </div>
 

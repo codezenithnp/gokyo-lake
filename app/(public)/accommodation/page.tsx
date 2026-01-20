@@ -117,20 +117,23 @@ const AccommodationPage = () => {
                 </div>
 
                 {/* bottom row */}
-                <div className="p-6 bg-white flex justify-between items-center">
-                  <Link
-                    href="/accommodation"
-                    className="flex items-center font-semibold text-gray-900 hover:text-black hover:underline"
-                  >
-                    <span className="mr-3 flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 text-gray-800">
-                      +
-                    </span>
-                    VIEW ROOM DETAILS
+                <div className="p-8 text-left">
+                  <h3 className="text-2xl font-serif text-gray-900">
+                    {room.name}
+                  </h3>
+                  <p className="text-lg text-gray-700 mt-2">
+                    Starting from{" "}
+                    <span className="font-bold text-xl">${room.price}</span> / night
+                  </p>
+                  <p className="mt-4 text-gray-600">
+                    The {room.name.toLowerCase()} is a great choice for travelers
+                    looking for a comfortable and affordable stay.
+                  </p>
+                  <Link href={`/booking?room=${room.name.split(" ")[0]}`}>
+                    <button className="mt-6 bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600 transition duration-300">
+                      Book Now
+                    </button>
                   </Link>
-
-                  <span className="bg-[#d7b16b] text-white px-4 py-2 font-bold rounded-full text-sm">
-                    ${room.price} Avg/night
-                  </span>
                 </div>
               </div>
             ))}
@@ -148,7 +151,9 @@ const AccommodationPage = () => {
           <p className="mx-auto max-w-2xl text-lg italic text-gray-800">
             “Calm, Serene, Retro – What a way to relax and enjoy”
           </p>
-          <p className="mt-3 text-sm font-semibold text-gray-600">Rizs - Nepal</p>
+          <p className="mt-3 text-sm font-semibold text-gray-600">
+            Rizs - Nepal
+          </p>
 
           <div className="mt-8 flex items-center justify-center gap-4">
             <button className="h-10 w-10 rounded bg-[#d7b16b] text-white text-2xl leading-none">

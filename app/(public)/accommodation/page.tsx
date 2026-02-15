@@ -1,37 +1,36 @@
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-const roomsData = [
-  {
-    name: "SINGLE ROOM",
-    price: 147,
-    image: "https://picsum.photos/seed/single-room/1200/600",
-  },
-  {
-    name: "DOUBLE ROOM",
-    price: 155,
-    image: "https://picsum.photos/seed/double-room/1200/600",
-  },
-  {
-    name: "TWIN ROOM",
-    price: 155,
-    image: "https://picsum.photos/seed/twin-room/1200/600",
-  },
-];
+import { useEffect, useState } from "react";
+import Reveal from "@/components/ui/Reveal";
+import AccommodationRooms from "@/components/public/AccommodationRooms";
+import RoomReviews from "@/components/public/RoomReviews";
 
 const AccommodationPage = () => {
+  const [heroImage, setHeroImage] = useState("");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch("/api/public/gallery");
+        if (!res.ok) return;
+        const data = await res.json();
+        const all = Array.isArray(data.images) ? data.images : [];
+        const hero = all.find((img: { category: string }) => img.category === "Hero");
+        if (hero) setHeroImage(hero.imageUrl);
+      } catch { /* silent */ }
+    };
+    load();
+  }, []);
+
   return (
     <div>
       {/* Hero Section */}
       <div
-        className="relative h-screen bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://picsum.photos/seed/accom-hero/1920/1080')",
-        }}
+        className="relative h-screen bg-cover bg-center bg-gray-800"
+        style={heroImage ? { backgroundImage: `url('${heroImage}')` } : undefined}
       >
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+        <div className="absolute inset-0 hero-overlay" />
+        <Reveal className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
           <h2 className="text-2xl font-light tracking-widest">WELCOME TO</h2>
           <h1 className="text-6xl md:text-7xl font-serif font-bold drop-shadow-lg">
             Hotel Gokyo lake
@@ -59,110 +58,39 @@ const AccommodationPage = () => {
               </svg>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Rooms and Rates Section */}
       <div className="py-20 bg-white">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-serif mb-4 text-gray-900">
-            ROOMS AND RATES
-          </h2>
-          <p className="max-w-2xl mx-auto text-gray-700 mb-16">
-            We want your stay at our lush hotel to be truly unforgettable. That
-            is why we give special attention to all of your needs so that we can
-            ensure an experience quite unique.
-          </p>
+          <Reveal>
+            <h2 className="text-4xl font-serif mb-4 text-gray-900">
+              ROOMS AND RATES
+            </h2>
+            <p className="max-w-2xl mx-auto text-gray-700 mb-16">
+              We want your stay at our lush hotel to be truly unforgettable. That
+              is why we give special attention to all of your needs so that we can
+              ensure an experience quite unique.
+            </p>
+          </Reveal>
 
-          <div className="flex flex-col items-center space-y-12">
-            {roomsData.map((room, index) => (
-              <div
-                key={index}
-                className="w-full max-w-5xl border border-gray-200 rounded-lg overflow-hidden shadow-lg bg-white"
-              >
-                <div className="relative">
-                  <Image
-                    src={room.image}
-                    alt={room.name}
-                    width={1200}
-                    height={600}
-                    className="w-full h-auto object-cover"
-                  />
-
-                  {/* dots */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-                    <div
-                      className={`w-2.5 h-2.5 ${
-                        index === 0 ? "bg-white" : "bg-white/40"
-                      } rounded-full`}
-                    />
-                    <div
-                      className={`w-2.5 h-2.5 ${
-                        index === 1 ? "bg-white" : "bg-white/40"
-                      } rounded-full`}
-                    />
-                    <div
-                      className={`w-2.5 h-2.5 ${
-                        index === 2 ? "bg-white" : "bg-white/40"
-                      } rounded-full`}
-                    />
-                  </div>
-                </div>
-
-                {/* blue strip */}
-                <div className="bg-[#0f5f7a] text-white p-4 text-center">
-                  <h3 className="font-bold text-2xl tracking-wider">
-                    {room.name}
-                  </h3>
-                </div>
-
-                {/* bottom row */}
-                <div className="p-8 text-left">
-                  <h3 className="text-2xl font-serif text-gray-900">
-                    {room.name}
-                  </h3>
-                  <p className="text-lg text-gray-700 mt-2">
-                    Starting from{" "}
-                    <span className="font-bold text-xl">${room.price}</span> / night
-                  </p>
-                  <p className="mt-4 text-gray-600">
-                    The {room.name.toLowerCase()} is a great choice for travelers
-                    looking for a comfortable and affordable stay.
-                  </p>
-                  <Link href={`/booking?room=${room.name.split(" ")[0]}`}>
-                    <button className="mt-6 bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600 transition duration-300">
-                      Book Now
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+          <AccommodationRooms />
         </div>
       </div>
 
-      {/* Testimonials Section */}
+      {/* Guest Reviews Section */}
       <div className="py-20 bg-white">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-serif mb-8 text-gray-900">
-            Testimonials
-          </h2>
-
-          <p className="mx-auto max-w-2xl text-lg italic text-gray-800">
-            “Calm, Serene, Retro – What a way to relax and enjoy”
-          </p>
-          <p className="mt-3 text-sm font-semibold text-gray-600">
-            Rizs - Nepal
-          </p>
-
-          <div className="mt-8 flex items-center justify-center gap-4">
-            <button className="h-10 w-10 rounded bg-[#d7b16b] text-white text-2xl leading-none">
-              ‹
-            </button>
-            <button className="h-10 w-10 rounded bg-[#d7b16b] text-white text-2xl leading-none">
-              ›
-            </button>
-          </div>
+        <div className="container mx-auto px-6">
+          <Reveal>
+            <h2 className="text-4xl font-serif mb-4 text-gray-900 text-center">
+              Guest Reviews
+            </h2>
+            <p className="max-w-2xl mx-auto text-gray-700 mb-12 text-center">
+              Hear what our guests have to say about their stay.
+            </p>
+          </Reveal>
+          <RoomReviews />
         </div>
       </div>
     </div>
@@ -170,3 +98,4 @@ const AccommodationPage = () => {
 };
 
 export default AccommodationPage;
+

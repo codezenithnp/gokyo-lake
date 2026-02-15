@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-blue: #0b3a5b;
+  --secondary-blue: #0f5f7a;
+  --bg-soft: #f6f8fb;
+  --text-ink: #0f172a;
+  --gold: #d7b16b;
+  --background: var(--bg-soft);
+  --foreground: var(--text-ink);
+  --shadow-card: 0 16px 34px -26px rgba(11, 58, 91, 0.45);
+  --shadow-glow: 0 12px 30px -18px rgba(11, 58, 91, 0.5);
 }
 
 @theme inline {
@@ -22,5 +29,153 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Helvetica Neue", Arial, sans-serif;
+}
+
+.lux-link {
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.lux-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--gold);
+  transition: transform 0.3s ease;
+}
+
+.lux-link:hover::after,
+.lux-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.lux-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.lux-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px -34px rgba(11, 58, 91, 0.6);
+}
+
+.lux-btn {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lux-btn:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-glow);
+}
+
+.non-hero .cinematic-btn {
+  background: var(--primary-blue);
+  color: #fff;
+  border: none;
+}
+
+.non-hero .cinematic-btn:hover {
+  background: var(--secondary-blue);
+}
+
+.hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(11, 58, 91, 0.55) 0%,
+    rgba(11, 58, 91, 0.12) 60%,
+    rgba(11, 58, 91, 0.45) 100%
+  );
+}
+
+.hero-zoom {
+  background-size: cover;
+  background-position: center;
+  animation: slow-zoom 24s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  animation: reveal-up var(--reveal-duration, 0.8s)
+    cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .lux-btn,
+  .lux-btn:hover,
+  .cinematic-btn,
+  .cinematic-btn:hover,
+  .lux-card,
+  .lux-card:hover {
+    transform: none;
+    transition: none;
+    box-shadow: var(--shadow-card);
+  }
+
+  .hero-zoom {
+    animation: none;
+  }
+}
+
+/* Admin panel form input text visibility fix */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea,
+select {
+  color: #111827 !important;
+  background-color: #fff !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"])::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
 }

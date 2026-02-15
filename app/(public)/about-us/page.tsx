@@ -1,8 +1,28 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiEye, FiHome, FiHeart, FiMapPin } from "react-icons/fi";
+import { isCloudinaryUrl } from "@/lib/image";
 
 const AboutUsPage = () => {
+  const [aboutImage, setAboutImage] = useState("");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch("/api/public/gallery");
+        if (!res.ok) return;
+        const data = await res.json();
+        const all = Array.isArray(data.images) ? data.images : [];
+        const img = all.find((i: { category: string }) => i.category === "About");
+        if (img) setAboutImage(img.imageUrl);
+      } catch { /* silent */ }
+    };
+    load();
+  }, []);
+
   return (
     <div className="bg-white text-gray-800">
       <div className="container mx-auto max-w-6xl px-6 py-16">
@@ -22,13 +42,19 @@ const AboutUsPage = () => {
             </p>
           </div>
           <div>
-            <Image
-              src="https://picsum.photos/seed/about-story-new/800/600"
-              alt="View of Gokyo Lake from the hotel"
-              width={800}
-              height={600}
-              className="rounded-lg shadow-xl"
-            />
+            {aboutImage ? (
+              <div className="relative aspect-[4/3] w-full">
+                <Image
+                  src={aboutImage}
+                  alt="View of Gokyo Lake from the hotel"
+                  fill
+                  className="rounded-lg shadow-xl object-cover"
+                  unoptimized={isCloudinaryUrl(aboutImage)}
+                />
+              </div>
+            ) : (
+              <div className="aspect-[4/3] w-full rounded-lg bg-gray-100" />
+            )}
           </div>
         </div>
 
@@ -79,11 +105,11 @@ const AboutUsPage = () => {
         </div>
 
         {/* CTA Strip */}
-        <div className="bg-gray-100 rounded-lg p-8 text-center">
+        <div className="bg-gray-100 rounded-lg p-8 text-center lux-card">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">Have Questions?</h3>
           <p className="text-gray-700 mb-6">Our team is ready to help you plan your perfect Himalayan getaway.</p>
           <Link href="/contact-us">
-            <button className="bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-yellow-700 transition duration-300">
+            <button className="lux-btn bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-yellow-700 transition duration-300">
               Contact Us
             </button>
           </Link>
@@ -95,7 +121,7 @@ const AboutUsPage = () => {
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => {
   return (
-    <div className="bg-gray-50 p-6 rounded-lg text-center shadow-sm border border-gray-200">
+    <div className="bg-gray-50 p-6 rounded-lg text-center shadow-sm border border-gray-200 lux-card">
       <div className="flex justify-center text-yellow-600 mb-4">
         {icon}
       </div>

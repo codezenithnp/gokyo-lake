@@ -4,19 +4,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "lux-btn inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "bg-[color:var(--primary-blue)] text-white hover:bg-[color:var(--secondary-blue)]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-[color:var(--primary-blue)] text-[color:var(--primary-blue)] bg-white hover:bg-[color:var(--bg-soft)]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-[color:var(--secondary-blue)] text-white hover:bg-[color:var(--primary-blue)]",
+        ghost:
+          "hover:bg-[color:var(--bg-soft)] hover:text-[color:var(--primary-blue)]",
+        link: "text-[color:var(--primary-blue)] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2",

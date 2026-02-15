@@ -1,46 +1,68 @@
-// lib/auth.ts
-import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
+import { SignJWT, jwtVerify } from "jose";
+import type { NextRequest } from "next/server";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+type AdminTokenPayload = {
+  adminId: string;
+  email: string;
+  role: string;
+};
 
-export function verifyToken(token: string) {
-    if (!JWT_SECRET) {
-        console.error('JWT_SECRET is not defined');
-        return null;
+const { JWT_SECRET, NODE_ENV } = process.env;
+
+if (!JWT_SECRET) {
+  const message = "Missing JWT_SECRET environment variable.";
+  if (NODE_ENV === "production") {
+    throw new Error(message);
+  }
+  console.warn(message);
+}
+
+const secretKey = JWT_SECRET ? new TextEncoder().encode(JWT_SECRET) : null;
+
+export async function signAdminToken(payload: AdminTokenPayload) {
+  if (!secretKey) {
+    throw new Error("Missing JWT_SECRET environment variable.");
+  }
+  return new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(secretKey);
+}
+
+export async function verifyAdminToken(token: string) {
+  if (!secretKey) {
+    throw new Error("Missing JWT_SECRET environment variable.");
+  }
+  const { payload } = await jwtVerify<AdminTokenPayload>(token, secretKey);
+  return payload;
+}
+
+function getCookieValue(cookieHeader: string | null, name: string) {
+  if (!cookieHeader) return null;
+  const cookies = cookieHeader.split(";").map((cookie) => cookie.trim());
+  for (const cookie of cookies) {
+    const [key, ...rest] = cookie.split("=");
+    if (key === name) {
+      return decodeURIComponent(rest.join("="));
     }
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        return decoded;
-    } catch (error) {
-        return null;
-    }
+  }
+  return null;
 }
 
-export function createToken(payload: object) {
-    if (!JWT_SECRET) {
-        throw new Error('JWT_SECRET is not defined. Cannot create token.');
-    }
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
-}
+export async function getAdminFromRequest(req: NextRequest | Request) {
+  const cookieHeader = req.headers.get("cookie");
+  const token =
+    "cookies" in req && typeof req.cookies?.get === "function"
+      ? req.cookies.get("admin_token")?.value ?? null
+      : getCookieValue(cookieHeader, "admin_token");
 
-export async function getSession() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('session')?.value;
-    if (!token) return null;
-    return verifyToken(token);
-}
+  if (!token) return null;
 
-export async function login(formData: FormData) {
-    // For demonstration, assuming a user is verified and a token is created
-    const user = { id: '1', name: 'Admin' }; // Example user
-    const token = createToken(user);
-
-    const cookieStore = await cookies();
-    cookieStore.set('session', token, { httpOnly: true, path: '/' });
-}
-
-export async function logout() {
-    const cookieStore = await cookies();
-    cookieStore.delete('session');
+  try {
+    const payload = await verifyAdminToken(token);
+    return payload;
+  } catch {
+    return null;
+  }
 }
